@@ -24,6 +24,9 @@ if uploaded_file is not None:
         st.subheader("Uploaded Data")
         st.dataframe(df.head())
 
+        required_cols = model.feature_names_
+        df = df[required_cols]
+
         # ======================
         # Feature Engineering
         # ======================
