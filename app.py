@@ -48,12 +48,22 @@ if uploaded_file is not None:
         # ======================
         # Make Predictions
         # ======================
-        predictions = model.predict(df)
+        #predictions = model.predict(df)
+
+        # Get probability of dropout
+        pred_proba = model.predict_proba(df)[:, 1]  # probability of class 1 (Dropout)
+
+        # Set threshold to 0.7
+        threshold = 0.7
+        pred_labels = ["Dropout" if p > threshold else "Not Dropout" for p in pred_proba]
+
+        df["Prediction"] = pred_labels
+
 
         # Map predictions if necessary
         # Example: 0 = Not Dropout, 1 = Dropout
-        pred_labels = ["Not Dropout" if p == 0 else "Dropout" for p in predictions]
-        df["Prediction"] = pred_labels
+        #pred_labels = ["Not Dropout" if p == 0 else "Dropout" for p in predictions]
+        #df["Prediction"] = pred_labels
 
         st.subheader("Predictions")
         st.dataframe(df[["Prediction"] + [col for col in df.columns if col != "Prediction"]])
